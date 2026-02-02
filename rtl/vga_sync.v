@@ -30,8 +30,8 @@ module vga_sync (
     parameter v_pulsewidth = 2;     // Sync pulse
     parameter v_backp = 31;         // Back porch
 
-    reg h_count = 0;        // Tracks horizontal pixel position
-    reg v_count = 0;        // Counts the number of hsync signals
+    reg [9:0] h_count = 0;          // Tracks horizontal pixel position
+    reg [9:0] v_count = 0;          // Counts the number of hsync signals
 
     // Video is on only if we are within the active horizontal and vertical regions
     assign video_on = (h_count < h_video) && (v_count < v_video);
