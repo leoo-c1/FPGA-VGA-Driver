@@ -33,35 +33,40 @@ module vga_sync (
             h_sync <= 1'b1;                         // Keep hsync inactive
             h_count <= h_count + 1;                 // Keep incrementing horizontal pixels
 
-        end else begin                              // If we have reached the sync pulse
-            if (h_count < h_video + h_frontp + h_pulsewidth) begin  // If we are still in sync pulse
+        // If we reach the sync pulse region and haven't left yet
+        end else if (h_count < h_video + h_frontp + h_pulsewidth) begin
                 h_sync <= 1'b0;                     // Keep hsync active
                 h_count <= h_count + 1;             // Keep incrementing horizontal pixels
-            end
 
-            else begin                              // If we reach the end of the sync pulse
-                h_sync <= 1'b1;                     // Make hsync inactive
+        // If we reach the back porch region and haven't left yet
+        end else if (h_count < h_video + h_frontp + h_pulsewidth + h_backp) begin
+            h_sync <= 1'b1;                         // Keep hsync inactive
+            h_count <= h_count + 1;
+
+        end else begin                              // If we reach the end of the sync pulse
+                h_sync <= 1'b1;                     // Keep hsync inactive
                 h_count <= 0;                       // Reset horizontal count
-            end
-
         end
     end
 
-    always @ (negedge hsync) begin
+    always @ (negedge hsync) begin                  // Every time we signal a new row
         if (v_count < v_video + v_frontp) begin     // If we haven't reached the sync pulse yet
             v_sync <= 1'b1;                         // Keep vsync inactive
-            v_count <= v_count + 1;                 // Keep incrementing vertical lines
+            v_count <= v_count + 1;                 // Keep incrementing horizontal pixels
 
-        end else begin                              // If we have reached the sync pulse
-            if (v_count < v_video + v_frontp + v_pulsewidth) begin  // If we are still in sync pulse
+        // If we reach the sync pulse region and haven't left yet
+        end else if (v_count < v_video + v_frontp + v_pulsewidth) begin
                 v_sync <= 1'b0;                     // Keep vsync active
                 v_count <= v_count + 1;             // Keep incrementing vertical lines
 
-            end else begin                          // If we reach the end of the sync pulse
-                v_sync <= 1'b1;                     // Make vsync inactive
-                v_count <= 0;                       // Reset vertical count
-            end
+        // If we reach the back porch region and haven't left yet
+        end else if (v_count < v_video + v_frontp + v_pulsewidth + v_backp) begin
+            v_sync <= 1'b1;                         // Keep vsync inactive
+            v_count <= v_count + 1;
 
+        end else begin                              // If we reach the end of the sync pulse
+                v_sync <= 1'b1;                     // Keep vsync inactive
+                v_count <= 0;                       // Reset vertical count
         end
     end
 
