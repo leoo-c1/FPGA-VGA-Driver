@@ -3,10 +3,15 @@ module vga_sync (
     input wire rst,         // Reset button
 
     output reg h_sync,      // Horizontal sync signal
-    output reg v_sync       // Vertical sync signal
+    output reg v_sync,      // Vertical sync signal
+
+    output reg pixel_x,     // Horizontal pixel coordinate (from 0)
+    output reg pixel_y,     // Vertical pixel coordinate (from 0)
+
+    output wire video_on    // Whether or not we are in the active video region
     );
 
-    reg clk_0;              // 25MHz clock
+    reg clk_0 = 0;          // 25MHz clock
 
     // Clock divider
     always @ (posedge clk) begin
@@ -28,8 +33,26 @@ module vga_sync (
     reg h_count = 0;        // Tracks horizontal pixel position
     reg v_count = 0;        // Counts the number of hsync signals
 
+    // Video is on only if we are within the active horizontal and vertical regions
+    assign video_on = (h_count < h_video) && (v_count < v_video);
+
     always @ (posedge clk_0) begin
-        if (h_count < h_video + h_frontp) begin     // If we haven't reached the sync pulse yet
+        pixel_x <= h_count;         // Update horizontal pixel coordinates
+        pixel_y <= v_count;         // Update vertical pixel coordinates
+
+        if (!rst) begin             // If the reset button is pressed, reset all signals
+            h_count <= 0;
+            v_count <= 0;
+            h_sync <= 1'b1;
+            v_sync <= 1'b1;
+        
+        // If we haven't reached the front porch yet
+        end else if (h_count < h_video) begin
+            h_sync <= 1'b1;                         // Keep hsync inactive
+            h_count <= h_count + 1;                 // Keep incrementing horizontal pixels
+        
+        // If we reach the front porch and haven't left yet
+        end else if (h_count < h_video + h_frontp) begin
             h_sync <= 1'b1;                         // Keep hsync inactive
             h_count <= h_count + 1;                 // Keep incrementing horizontal pixels
 
@@ -41,7 +64,7 @@ module vga_sync (
         // If we reach the back porch region and haven't left yet
         end else if (h_count < h_video + h_frontp + h_pulsewidth + h_backp - 1) begin
             h_sync <= 1'b1;                         // Keep hsync inactive
-            h_count <= h_count + 1;
+            h_count <= h_count + 1;                 // Keep incrementing horizontal pixels
 
         end else begin                              // If we reach the end of the sync pulse
             h_sync <= 1'b1;                         // Keep hsync inactive
