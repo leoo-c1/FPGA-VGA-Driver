@@ -1,4 +1,4 @@
-module vga_render (
+module vga_renderer (
     input clk_0,            // 25MHz clock
     input rst,              // Reset button
 
