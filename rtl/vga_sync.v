@@ -5,8 +5,8 @@ module vga_sync (
     output reg h_sync,      // Horizontal sync signal
     output reg v_sync,      // Vertical sync signal
 
-    output reg pixel_x,     // Horizontal pixel coordinate (from 0)
-    output reg pixel_y,     // Vertical pixel coordinate (from 0)
+    output reg [9:0] pixel_x,   // Horizontal pixel coordinate (from 0)
+    output reg [9:0] pixel_y,   // Vertical pixel coordinate (from 0)
 
     output wire video_on    // Whether or not we are in the active video region
     );
