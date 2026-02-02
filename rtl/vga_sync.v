@@ -2,8 +2,8 @@ module vga_sync (
     input wire clk,         // 50MHz clock
     input wire rst,         // Reset button
 
-    output reg hsync,      // Horizontal sync signal
-    output reg vsync       // Vertical sync signal
+    output reg h_sync,      // Horizontal sync signal
+    output reg v_sync       // Vertical sync signal
     );
 
     reg clk_0;              // 25MHz clock
@@ -34,8 +34,10 @@ module vga_sync (
             h_count <= h_count + 1;                 // Keep incrementing horizontal pixels
 
         end else begin                              // If we have reached the sync pulse
-            if (h_count < h_video + h_frontp + h_pulsewidth)    // If we are still in sync pulse
-                h_sync <= 1'b0;                                 // Keep hsync active
+            if (h_count < h_video + h_frontp + h_pulsewidth) begin  // If we are still in sync pulse
+                h_sync <= 1'b0;                     // Keep hsync active
+                h_count <= h_count + 1;             // Keep incrementing horizontal pixels
+            end
 
             else begin                              // If we reach the end of the sync pulse
                 h_sync <= 1'b1;                     // Make hsync inactive
@@ -51,10 +53,11 @@ module vga_sync (
             v_count <= v_count + 1;                 // Keep incrementing vertical lines
 
         end else begin                              // If we have reached the sync pulse
-            if (v_count < v_video + v_frontp + v_pulsewidth)    // If we are still in sync pulse
-                v_sync <= 1'b0;                                 // Keep vsync active
+            if (v_count < v_video + v_frontp + v_pulsewidth) begin  // If we are still in sync pulse
+                v_sync <= 1'b0;                     // Keep vsync active
+                v_count <= v_count + 1;             // Keep incrementing vertical lines
 
-            else begin                              // If we reach the end of the sync pulse
+            end else begin                          // If we reach the end of the sync pulse
                 v_sync <= 1'b1;                     // Make vsync inactive
                 v_count <= 0;                       // Reset vertical count
             end
