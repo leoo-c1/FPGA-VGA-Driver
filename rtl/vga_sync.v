@@ -2,6 +2,8 @@ module vga_sync (
     input wire clk,         // 50MHz clock
     input wire rst,         // Reset button
 
+    output reg clk_0 = 0,       // 25MHz divided clock
+
     output reg h_sync,      // Horizontal sync signal
     output reg v_sync,      // Vertical sync signal
 
@@ -10,8 +12,6 @@ module vga_sync (
 
     output wire video_on    // Whether or not we are in the active video region
     );
-
-    reg clk_0 = 0;          // 25MHz clock
 
     // Clock divider
     always @ (posedge clk) begin
