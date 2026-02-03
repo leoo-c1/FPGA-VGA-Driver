@@ -16,7 +16,7 @@ module fill_with_border (
 
     parameter border_width = 10;    // Width of the surrounding border
 
-    // Render a white screen in the active video area, red outside
+    // Render a white screen in the active video area, 10px red border surrounding
     always @ (posedge clk_0) begin
         if (!rst) begin                 // If we press the reset button, show black
             red <= 1'b0;
