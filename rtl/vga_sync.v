@@ -10,7 +10,7 @@ module vga_sync (
     output reg [9:0] pixel_x,   // Horizontal pixel coordinate (from 0)
     output reg [9:0] pixel_y,   // Vertical pixel coordinate (from 0)
 
-    output wire video_on    // Whether or not we are in the active video region
+    output reg video_on     // Whether or not we are in the active video region
     );
 
     // Clock divider
@@ -33,12 +33,10 @@ module vga_sync (
     reg [9:0] h_count = 0;          // Tracks horizontal pixel position
     reg [9:0] v_count = 0;          // Counts the number of hsync signals
 
-    // Video is on only if we are within the active horizontal and vertical regions
-    assign video_on = (h_count < h_video) && (v_count < v_video);
-
     always @ (posedge clk_0) begin
         pixel_x <= h_count;         // Update horizontal pixel coordinates
         pixel_y <= v_count;         // Update vertical pixel coordinates
+        video_on <= (h_count < h_video) && (v_count < v_video);
 
         if (!rst) begin             // If the reset button is pressed, reset all signals
             h_count <= 0;
