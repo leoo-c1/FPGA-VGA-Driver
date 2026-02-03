@@ -17,32 +17,8 @@ module alternating_colours (
     parameter number_of_bars = 32;  // Number of vertical bars to display
     parameter bar_width = h_video / number_of_bars;     // Width of each vertical bar
 
-    /*
-    Plan:
-    First figure out generating red bars.
-    First red bar has left edge at 0. Second has left edge at 0+3*bar_width (it is 3 bars away)
-    So we need to check if pixel_x lies between these ranges: [0,w],[3w,4w],[6w,7w],...[3nw,(3n+1)w]
-    Really, we just need to check if pixel_x is some integer multiple of 3w, then hold it red for bar_width duration
-    Two strategies:
-    1. Check if modulus of pixel_x and 3w == 0, set flag to red_on and draw red bar for that duration
-    (May be costly to synthesise modulo)
-    2. Instead, set up a count.
-    The count starts at 0 when pixel_x == 0.
-    Once we've counted w pixels, we stop showing red.
-    We start counting how many pixels we haven't been showing red for.
-    Once this new count hits 2w, stop the new counter and restart the first count.
-    This indicates we are back at a red bar. Restart the first count.
-    Continue this process until the condition if (video_on) isn't met and apply for other colours.
-    How to apply for other colours? Start with green.
-
-    */
-
     reg [9:0] red_counter = 0;
     reg [9:0] non_red_counter = 0;
-    reg [9:0] green_counter = 0;
-    reg [9:0] non_green_counter = 0;
-    reg [9:0] blue_counter = 0;
-    reg [9:0] non_blue_counter = 0;
 
     // Render a series of red, green and blue bars in the video region
     always @ (posedge clk_0) begin
