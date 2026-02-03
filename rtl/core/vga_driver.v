@@ -28,7 +28,7 @@ module vga_driver (
         .video_on(video_on)
     );
 
-    fill_with_border fill_with_border (
+    alternating_colours scene (
         .clk_0(clk_0),
         .rst(rst),
         .pixel_x(pixel_x),
