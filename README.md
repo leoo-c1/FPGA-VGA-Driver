@@ -21,7 +21,7 @@ The system generates a standard 640x480 @ 60Hz signal using a 25.175MHz pixel cl
 
 ## System Architecture
 
-The design is split into three layers:
+The design is split into multiple layers:
 
 ```mermaid
 graph LR
