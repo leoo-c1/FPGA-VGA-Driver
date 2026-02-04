@@ -81,10 +81,6 @@ The project was originally designed for the Intel Cyclone IV EP4CE6E22C8N FPGA o
 
 The repository currently includes the following render scenes:
 
-## Modular Scenes
-
-The repository currently includes the following render scenes:
-
 * **`bouncing_ball_2d.v`**: A collision physics demonstration featuring a square object with 2D velocity vectors.
 * **`bouncing_ball_1d.v`**: A simplified collision physics test with horizontal-only movement logic.
 * **`sliding_square.v`**: A basic animation test featuring a square that wraps around the screen edges.
