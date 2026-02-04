@@ -2,7 +2,7 @@ module vga_sync (
     input wire clk,         // 50MHz clock
     input wire rst,         // Reset button
 
-    output reg clk_0 = 0,       // 25MHz divided clock
+    output wire clk_0,      // 25.175MHz divided clock
 
     output reg h_sync,      // Horizontal sync signal
     output reg v_sync,      // Vertical sync signal
@@ -13,10 +13,14 @@ module vga_sync (
     output reg video_on     // Whether or not we are in the active video region
     );
 
-    // Clock divider
-    always @ (posedge clk) begin
-        clk_0 <= !clk_0;            // clk_0 has half the frequency of clk, 50/2 = 25MHz
-    end
+    wire pll_locked;
+
+    sys_pll pll_inst (
+        .inclk0(clk),       // 50MHz input clock
+        .rst(rst),          // Reset button
+        .c0(clk_0),         // 25.175MHz output clock
+        .locked(pll_locked)
+    );
 
     // Horizontal timing values (in pixels):
     parameter h_video = 640;        // Active video

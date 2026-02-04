@@ -5,7 +5,7 @@ module vga_sync_tb;
     reg clk;                // 50MHz clock
     reg rst;                // Reset button
 
-    wire clk_0;             // 25MHz divided clock
+    wire clk_0;             // 25.175MHz divided clock
 
     wire h_sync;            // Horizontal sync signal
     wire v_sync;            // Vertical sync signal
