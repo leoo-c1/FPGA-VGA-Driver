@@ -10,7 +10,7 @@ module vga_driver (
     output blue             // Pixel blue value (single bit, 0v or 0.7v)
     );
 
-    wire clk_0;             // Intermediate wire to connect 25MHz clock between modules
+    wire clk_0;             // Intermediate wire to connect 25.175MHz clock between modules
 
     wire [9:0] pixel_x;     // Horizontal pixel coordinate (from 0)
     wire [9:0] pixel_y;     // Vertical pixel coordinate (from 0)
@@ -28,7 +28,7 @@ module vga_driver (
         .video_on(video_on)
     );
 
-    alternating_colours scene (
+    bouncing_ball_2d scene (
         .clk_0(clk_0),
         .rst(rst),
         .pixel_x(pixel_x),
