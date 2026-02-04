@@ -16,9 +16,9 @@ module bouncing_ball_2d (
 
     parameter square_width = 10;    // The side lengths of the square
     
-    // The x-coordinate of the bottom left corner of the square
+    // The x-coordinate of the top left corner of the square
     reg [9:0] square_xpos = h_video /2;
-    // The y-coordinate of the bottom left corner of the square
+    // The y-coordinate of the top left corner of the square
     reg [9:0] square_ypos = v_video/2;
 
     parameter velocity = 200;       // Velocity in pixels/second
@@ -28,7 +28,7 @@ module bouncing_ball_2d (
     reg vel_ydir = 0;               // Square's direction of velocity along y, 0 = up, 1 = down
 
     always @ (posedge clk_0) begin
-        if (!rst) begin                 // If we press the reset button, show black
+        if (!rst) begin             // If we press the reset button, show black
             red <= 1'b0;
             green <= 1'b0;
             blue <= 1'b0;
@@ -61,14 +61,15 @@ module bouncing_ball_2d (
                 blue <= 1'b0;
             end
 
-        end else begin                  // If we are outside the active video region, show black
+        end else begin          // If we are outside the active video region, show black
             red <= 1'b0;
             green <= 1'b0;
             blue <= 1'b0;
         end
 
         // Control square's x and y velocity
-        if (square_xpos >= h_video - square_width - 1) begin    // If we hit the right wall
+        // If we hit the right wall
+        if (square_xpos >= h_video - square_width - 1) begin
             vel_xdir <= ~vel_xdir;              // Change direction along x-axis
             square_xpos <= square_xpos - 1;     // Move to the left by one pixel
 
@@ -77,11 +78,13 @@ module bouncing_ball_2d (
             square_xpos <= square_xpos + 1;     // Move to the right one pixel
         end
 
-        if (square_ypos >= v_video - square_width - 1) begin    // If we hit the bottom wall
+        // If we hit the bottom wall
+        if (square_ypos >= v_video - square_width - 1) begin
             vel_ydir <= ~vel_ydir;              // Change direction along y-axis
             square_ypos <= square_ypos - 1;     // Move up by one pixel
 
-        end else if (square_ypos <= 0) begin    // If we hit the top wall
+        // If we hit the top wall
+        end else if (square_ypos <= 0) begin
             vel_ydir <= ~vel_ydir;              // Change direction along y-axis
             square_ypos <= square_ypos + 1;     // Move down one pixel
         end
@@ -89,13 +92,12 @@ module bouncing_ball_2d (
         // Control square's x and y position
         if (vel_count < vel_psc) begin
             vel_count <= vel_count + 1;
-        end else begin              // Increment square position every velocity tick
+        end else begin                          // Increment square position every velocity tick
             vel_count <= 0;
             square_xpos <= square_xpos + 2*vel_xdir - 1;
             square_ypos <= square_ypos + 2*vel_ydir - 1;
         end
 
     end
-
 
 endmodule
